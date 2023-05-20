@@ -11,13 +11,17 @@ const Home: NextPage = () => {
 
   const [ipAddress, setIpAddress] = useState<string>('');
 
+  type IpResponse = {
+    ip: string
+  }
+
   useEffect(() => {
     const getIp = async () => {
     const ipAddress = await fetch('https://api.ipify.org?format=json')
-    const ipJson = await ipAddress.json()
-    setIpAddress(ipJson.ip)
+    const ipJson = await ipAddress.json() as unknown as IpResponse;
+    setIpAddress(ipJson.ip);
     }
-    getIp();
+    void getIp();
   })
 
   return (
