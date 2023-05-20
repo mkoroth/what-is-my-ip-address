@@ -2,11 +2,23 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from 'react';
 
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+
+  const [ipAddress, setIpAddress] = useState('');
+
+  useEffect(() => {
+    const getIp = async () => {
+    const ipAddress = await fetch('https://api.ipify.org?format=json')
+    const ipJson = await ipAddress.json()
+    setIpAddress(ipJson.ip)
+    }
+    getIp();
+  })
 
   return (
     <>
@@ -47,6 +59,8 @@ const Home: NextPage = () => {
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+              <br />
+              {ipAddress}
             </p>
             <AuthShowcase />
           </div>
